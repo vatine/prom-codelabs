@@ -6,7 +6,7 @@ Working with histograms and percentiles.
 
 ## The Histogram in Prometheus
 
-A prometheus histogram is composed of several related metrics series. If we use `name` as the base name, you will have a `name_bucket` that contains the count for all observed data points that are lower or equal to the ceiling of the bucket, there is `name_count` that counts the number of observed data points, and there is also `name_sum` that contains the sum of the observed data points. All of these are effectifely counter metrics, so measure these since "start of the program".
+A prometheus histogram is composed of several related metrics series. If we use `name` as the base name, you will have a `name_bucket` that contains the count for all observed data points that are lower or equal to the ceiling of the bucket, there is `name_count` that counts the number of observed data points, and there is also `name_sum` that contains the sum of the observed data points. All of these are effectively counter metrics, so measure these since "start of the program".
 
 In order to work with these, we must thus take the rate over a short timespan (the exact size is effectively down to "get enough data").
 
