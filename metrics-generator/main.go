@@ -67,6 +67,27 @@ func squareGen(g prometheus.Gauge, dt time.Duration) {
 	}
 }
 
+func triangleGen(g prometheus.Gauge, dt time.Duration) {
+	tick := time.NewTicker(time.Second)
+	start := time.Now()
+	interval := float64(dt) / float64(time.Second)
+	half := interval / 2.0
+	for range tick.C {
+		now := float64(time.Since(start)) / float64(time.Second)
+		t := math.Mod(now, interval)
+		switch {
+		case t < half:
+			v := 1.0 - 2.0*t/half
+			g.Set(v)
+		case t == half:
+			g.Set(-1.0)
+		case t > half:
+			v := -1.0 + 2.0*(t-half)/half
+			g.Set(v)
+		}
+	}
+}
+
 // Compute a fake latency metric that has an approximately
 // real-looking distribution.
 func fakeLatency(attempts int, p float64) float64 {
@@ -103,6 +124,10 @@ func main() {
 		Name: "square",
 	}, []string{"period"})
 
+	triangles := prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "triangle",
+	}, []string{"period"})
+
 	latency := prometheus.NewHistogramVec(prometheus.HistogramOpts{
 		Name:    "latency",
 		Buckets: prometheus.LinearBuckets(0.005, 0.001, 150),
@@ -110,6 +135,7 @@ func main() {
 
 	prometheus.MustRegister(sines)
 	prometheus.MustRegister(squares)
+	prometheus.MustRegister(triangles)
 	prometheus.MustRegister(latency)
 
 	startGauge(sineGen, sines, 127*time.Second)
@@ -119,6 +145,10 @@ func main() {
 	startGauge(squareGen, squares, 131*time.Second)
 	startGauge(squareGen, squares, 307*time.Second)
 	startGauge(squareGen, squares, 701*time.Second)
+
+	startGauge(triangleGen, triangles, 127*time.Second)
+	startGauge(triangleGen, triangles, 293*time.Second)
+	startGauge(triangleGen, triangles, 701*time.Second)
 
 	startHisto(latency, 10)
 	startHisto(latency, 1000)
