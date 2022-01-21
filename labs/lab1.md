@@ -43,7 +43,7 @@ Now, switch back to the "Graph" pane. You should now see the three sine waves pr
 
 You can use labels to specify more precisely what data you want. This could be an exact match (`<label>=<name>`), an exact non-match (`<label>!=<name>`), a regular expression match ((`<label>=~<name>`) and a regular expression non-match ((`<label>!~<name>`).
 
-There are a few "hidden" labels, the most common is probably `name`. We previously asked for `sine`, but we could have asked for `{name="sine"}`. Try that now.
+There are a few "hidden" labels, the most common is probably `__name__`. We previously asked for `sine`, but we could have asked for `{__name__="sine"}`. Try that now.
 
 Next, we'll play with the regular expression match. Try evaluating `{period=~".*7s"}`. You should end up with two data points, one from a sine wave, and one from a square wave.
 
