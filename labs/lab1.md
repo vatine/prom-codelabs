@@ -71,6 +71,6 @@ In a similar fashion, `avg` will compute the arithmetic mean of all the data poi
 
 It is also possible to find the minimum or maximum of a set of data. Please compare and contrast the differences between the extremes of sine and square waves.
 
-We have, so far, not looked at counter metrics, but for a quick view, enter `latency_count` in the expression bar You will see two lines, one that goes steadily upwards and to the right and one that looks essentially flat in comparison.
+We have, so far, not looked at counter metrics, but for a quick view, enter `latency_count` in the expression bar. You will see two lines, one that goes steadily upwards and to the right and also one that looks essentially flat in comparison.
 
 To see what slope these have, we can use `rate`. Now enter `rate(latency_count[3m])` and see what happens. The `[3m]` means "for a duration of 3 minutes`. As a general rule, the longer time period you do a rate check on, the less spiky your rate will be. But, you also risk missing bursts of activity.
