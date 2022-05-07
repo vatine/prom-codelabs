@@ -35,7 +35,7 @@ In this case, there's an `instance` label, showing which specific instance that 
 
 There is also a `job` label. A `job` (in prometheus parlance) is composed of one or more instances. For most of these codelabs, we will only have a single instance in our job. Both the instance and job labels are injected by prometheus.
 
-There is also a `period` label, this is a label that's injected by the application we're scraping metrics from. In this specific case, this shows the period of the sine wave (that is, how long it takes it to do a full sweep from 0, to 1, to 0, to -1 and back to 0). You should see that each of the three data points you see have different period labels.
+There is also a `period` label, this is a label that's injected by the application that we're scraping metrics from. The `period` label in this case, is measuring the amount of time taken for a full oscilation to of occured e.g. how long it takes to do a full sweep from 0, to 1, to 0, to -1 and back to 0.
 
 Now, switch back to the "Graph" pane. You should now see the three sine waves pretty clearly. One of them may not yet have completed a full period, you can either continue with this codelab immediately, or take a short break to allow it to complete. We will stay in the "Graph" pane for the rest of the lab.
 
