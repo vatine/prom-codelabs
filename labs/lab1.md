@@ -57,9 +57,9 @@ Before we look too deeply into aggregations, we need to discuss the two primary 
 
 A gauge metric is the natural way of expressing a value that can go both up and down, like (say) free (or used) bytes in a filesystem.
 
-A counter metric is a good way of expressing things taht are easily counted, like (say) "we just processed an event".
+A counter metric is a good way of expressing things that are easily counted, like (say) "we just processed an event".
 
-The main drawback of a gauge metric is taht it is quite possible to miss rare changes. The main drawback of counter metrics is that they're inherently low-pass filtered (taht is, you can see that a spike happened, but you cannot tell if it was a brief, but high, or a longer, but lower, increase).
+The main drawback of a gauge metric is that it is quite possible to miss rare changes. The main drawback of counter metrics is that they're inherently low-pass filtered (that is, you can see that a spike happened, but you cannot tell if it was a brief, but high, or a longer, but lower, increase).
 
 ### Sums, averages, extremes and rates
 
