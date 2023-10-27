@@ -12,8 +12,9 @@ A prometheus histogram is composed of several related metrics series. If we use 
 
 To expand on the explanation of how the histogram buckets are seen, let's work through an example. Let's consider a histogram with bucket limits 5, 10, 15, ... 75 and (in order of observations) a bunch of observed values. Each column will (in the header) show the value we observed, and then the value (a count) of each observed bucket.
 
+
 | le | 41 | 39 | 87 | 71 | 66 | 73 |  2 | 73 | 25 | 21 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | ---- | --- | --- | --- | --- | --- |
 | 5  | 0  | 0  | 0  | 0  | 0  | 0  | 1  | 1  | 1  | 1  |
 | 10 | 0  | 0  | 0  | 0  | 0  | 0  | 1  | 1  | 1  | 1  |
 | 15 | 0  | 0  | 0  | 0  | 0  | 0  | 1  | 1  | 1  | 1  |
@@ -30,6 +31,7 @@ To expand on the explanation of how the histogram buckets are seen, let's work t
 | 70 | 1  | 2  | 2  | 2  | 3  | 3  | 4  | 4  | 5  | 6  |
 | 75 | 1  | 2  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  |
 |inf | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10  |
+
 
 During all of these /metric/_bucket metrics being updated, the observed value will be added to /metric/_sum and the number of observations will be in /metric/_count (so if we want the arithmetic mean we can simply divide those two).
 
