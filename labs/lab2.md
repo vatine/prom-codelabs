@@ -13,7 +13,7 @@ A prometheus histogram is composed of several related metrics series. If we use 
 To expand on the explanation of how the histogram buckets are seen, let's work through an example. Let's consider a histogram with bucket limits 5, 10, 15, ... 75 and (in order of observations) a bunch of observed values. Each column will (in the header) show the value we observed, and then the value (a count) of each observed bucket.
 
 | le | 41 | 39 | 87 | 71 | 66 | 73 |  2 | 73 | 25 | 21 |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5  | 0  | 0  | 0  | 0  | 0  | 0  | 1  | 1  | 1  | 1  |
 | 10 | 0  | 0  | 0  | 0  | 0  | 0  | 1  | 1  | 1  | 1  |
 | 15 | 0  | 0  | 0  | 0  | 0  | 0  | 1  | 1  | 1  | 1  |
