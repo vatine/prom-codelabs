@@ -32,8 +32,7 @@ To expand on the explanation of how the histogram buckets are seen, let's work t
 | 75 | 1  | 2  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  |
 |inf | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10  |
 
-
-During all of these /metric/_bucket metrics being updated, the observed value will be added to /metric/_sum and the number of observations will be in /metric/_count (so if we want the arithmetic mean we can simply divide those two).
+As the bucket counts are updated, the sum will be incremented by the observed value, and the count will increment by 1 (these are not shown).
 
 ## Exercises
 
