@@ -1,0 +1,62 @@
+rule_files:
+  - lab8-rules.yaml
+evaluation_interval: 30s
+tests:
+  - interval: 30s
+    input_series:
+      - series: accesses{job="test1", kind="door", location="basement"}
+        values: 0+0x29 1+0x29
+      - series: accesses{job="test1", kind="door", location="front"}
+        values: 0+1x59
+      - series: accesses{job="test2", kind="window", location="kitchen"}
+        values: 0 0 0 1 1 1 2 2 2 3 3 3 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 10 10 10 11 11 11 12 12 12 13 13 13 14 14 14 15 15 15 16 16 16 17 17 17 18 18 18 19 19 19 20 20 20
+      - series: accesses{job="test2", kind="window", location="bedroom", side="left"}
+        values: 0+0x59
+      - series: accesses{job="test2", kind="window", location="bedroom", side="right"}
+        values: 0+0x14 1+0x14 2+0x14 3+0x14 
+      - series: accesses{job="test2", kind="door", location="hallway"}
+        values: 0+0x39 1+0x19
+      - series: threshold{kind="door"}
+        values: 0.05+0x59
+      - series: threshold{kind="window"}
+        values: 0.001+0x59
+    promql_expr_test:
+      - expr: kind:accesses:rate5m
+        eval_time: 4m
+        exp_samples:
+          - labels: kind:accesses:rate5m{kind="door"}
+            value: 2.666666666666667E-02
+          - labels: kind:accesses:rate5m{kind="window"}
+            value: 6.666666666666667E-03
+      - expr: test:accesses:rate3m
+        eval_time: 4m
+        exp_samples:
+          - labels: test:accesses:rate3m{kind="door", location="basement"}
+            value: 0
+          - labels: test:accesses:rate3m{kind="door", location="front"}
+            value: 3.333333333333333E-02
+          - labels: test:accesses:rate3m{kind="door", location="hallway"}
+            value: 0
+          - labels: test:accesses:rate3m{kind="window", location="bedroom", side="left"}
+            value: 0
+          - labels: test:accesses:rate3m{kind="window", location="bedroom", side="right"}
+            value: 0
+          - labels: test:accesses:rate3m{kind="window", location="kitchen"}
+            value: 1.1111111111111112E-02
+    alert_rule_test:
+      - alertname: OpenedTooFrequently
+        eval_time: 16m
+        exp_alerts:
+          - exp_labels:
+              kind: window
+              location: kitchen
+            exp_annotations:
+              summary: "Too frequently opened."
+              description: "A window was opened too frequently."
+          - exp_labels:
+              kind: window
+              location: bedroom
+              side: right
+            exp_annotations:
+              summary: "Too frequently opened."
+              description: "A window was opened too frequently."
