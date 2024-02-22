@@ -2,7 +2,7 @@
 
 ## Dropping or ignoring labels
 
-Labels (and label values) are a large part of making Prometheus metrics working for you. These are (typically) retained through filtering and dropped during aggregation. BUt, there are cases where you want one (or more) labels to be treated specially.
+Labels (and label values) are a large part of making Prometheus metrics working for you. These are (typically) retained through filtering and dropped during aggregation. But, there are cases where you want one (or more) labels to be treated specially.
 
 ### Aggregations
 
