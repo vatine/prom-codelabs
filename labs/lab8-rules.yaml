@@ -1,0 +1,16 @@
+groups:
+  - name: test-rules
+    rules:
+      - record: location:accesses:sum
+        expr: sum(accesses) by (location)
+      - record: kind:access:sum
+        expr: sum(accesses) by (kind)
+      - record: kind:accesses:rate5m
+        expr: sum(rate(accesses[5m]))
+      - record: test:accesses:rate3m
+        expr: sum(rate(accesses[3m]))
+      - alert: OpenedTooFrequently
+        expr: test:accesses:rate3m > threshold
+        annotations:
+          summary: "Too frequently opened."
+          description: "A {{ $labels.kind }} was opened too frequently."
