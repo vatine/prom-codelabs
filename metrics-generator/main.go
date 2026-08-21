@@ -29,7 +29,7 @@ func startGauge(f gaugeFunc, gv *prometheus.GaugeVec, dt time.Duration) {
 // specific "requests per second". This will spawn a never-stopping
 // goroutine.
 func startHisto(hv *prometheus.HistogramVec, qps int) {
-	fmt.Printf("Starting histogram generatop with %d qps\n", qps)
+	fmt.Printf("Starting histogram generator with %d qps\n", qps)
 	lv := fmt.Sprintf("%d", qps)
 	go latencyGen(hv.With(prometheus.Labels{"qps": lv}), qps)
 }
