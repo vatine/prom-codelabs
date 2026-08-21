@@ -15,6 +15,16 @@ import (
 
 type gaugeFunc func(prometheus.Gauge, time.Duration)
 
+var bytesUsed = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	Name: "bytes_used",
+},
+	[]string{"name"},
+)
+var bytesAvailable = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	Name: "bytes_available",
+}, []string{"name"},
+)
+
 // Start a function generator with a specific gauge vector and a
 // specific period. This will spawn a never-stopping goroutine.
 func startGauge(f gaugeFunc, gv *prometheus.GaugeVec, dt time.Duration) {
@@ -23,6 +33,28 @@ func startGauge(f gaugeFunc, gv *prometheus.GaugeVec, dt time.Duration) {
 	g := gv.With(prometheus.Labels{"period": lv})
 	fmt.Printf("Starting gauge metrics generator with period %s\n", dt)
 	go f(g, dt)
+}
+
+// Start a byte-reporter for a source named <name>, ramping up at
+// <ramp> bytes / second, with a variance of [0-1]*<jitter> bytes.
+func startByteReporter(name string, base, max, ramp, jitter float64) {
+	used := bytesUsed.With(prometheus.Labels{"name": name})
+	available := bytesAvailable.With(prometheus.Labels{"name": name})
+	go byteReporter(base, max, ramp, jitter, used, available)
+}
+
+func byteReporter(base, max, ramp, jitter float64, used, available prometheus.Gauge) {
+	start := time.Now()
+	tick := time.NewTicker(time.Second)
+
+	used.Set(0.0)
+	available.Set(max)
+	for range tick.C {
+		delta := float64(time.Since(start)) / float64(time.Second)
+		value := base + ramp*delta + jitter*rand.Float64()
+		available.Set(max)
+		used.Set(value)
+	}
 }
 
 // Start a latency generator with a specific HistogramVec and a
@@ -137,6 +169,8 @@ func main() {
 	prometheus.MustRegister(squares)
 	prometheus.MustRegister(triangles)
 	prometheus.MustRegister(latency)
+	prometheus.MustRegister(bytesUsed)
+	prometheus.MustRegister(bytesAvailable)
 
 	startGauge(sineGen, sines, 127*time.Second)
 	startGauge(sineGen, sines, 293*time.Second)
@@ -152,6 +186,13 @@ func main() {
 
 	startHisto(latency, 10)
 	startHisto(latency, 1000)
+
+	startByteReporter("small_static", 10000, 30000, 0, 1500)
+	startByteReporter("large_static", 150000, 300000000, 0, 10000)
+	startByteReporter("small_slow", 0, 300000000, 10240, 3000)
+	startByteReporter("small_fast", 0, 300000000, 102400, 9000)
+	startByteReporter("large_slow", 0, 300000000000, 102400, 9000)
+	startByteReporter("large_fast", 0, 300000000000, 10240000, 90000)
 
 	http.Handle("/metrics", promhttp.Handler())
 	err := http.ListenAndServe(*port, nil)
