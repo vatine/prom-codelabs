@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Some of the Prometheus tooling
 
 Prometheus comes with a CLI tool called `promtool`, it is worth installing on your normal workstation even if you don't have a prometheus instance running on it.
